@@ -1,4 +1,5 @@
-package main
+// Package snapshotter implements the core tarfs logic: mounting OCI image layers directly from the containerd content store via FUSE, serving them live from their tar blobs without extraction.  Used by both the proxy snapshotter binary and the native containerd plugin.
+package snapshotter
 
 import (
 	"bytes"

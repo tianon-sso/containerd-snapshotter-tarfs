@@ -1,4 +1,4 @@
-package main
+package snapshotter
 
 import (
 	"archive/tar"

@@ -1,4 +1,4 @@
-// containerd-snapshotter-tarfs is a containerd proxy snapshotter that mounts OCI image layers directly from the content store via FUSE, with no extraction step.  Layers are served live from their tar blobs using tarfs (for plain tarballs) or gsip+tarfs (for gzip-compressed blobs).
+// containerd-snapshotter-tarfs is the proxy snapshotter binary.  It speaks the containerd gRPC proxy snapshotter protocol over a Unix socket, delegating all snapshot operations to [snapshotter.Snapshotter].
 package main
 
 import (
@@ -10,6 +10,8 @@ import (
 	"os/signal"
 	"path/filepath"
 	"syscall"
+
+	"github.com/values-conflict/containerd-snapshotter-tarfs/snapshotter"
 
 	snapshotsapi "github.com/containerd/containerd/api/services/snapshots/v1"
 	"github.com/containerd/containerd/v2/contrib/snapshotservice"
@@ -48,7 +50,7 @@ func run() error {
 
 	cs := proxy.NewContentStore(conn)
 
-	sn, err := NewSnapshotter(ctx, *stateDir, cs)
+	sn, err := snapshotter.NewSnapshotter(ctx, *stateDir, cs)
 	if err != nil {
 		return fmt.Errorf("creating snapshotter at %q: %w", *stateDir, err)
 	}
